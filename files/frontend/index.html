@@ -1,0 +1,36 @@
+<!-- static/index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>Chat with DeepSeek R1</title>
+</head>
+<body>
+    <h1>DeepSeek R1 Chat</h1>
+    <div>
+        <textarea id="userInput" rows="3" cols="50" placeholder="Ask something..."></textarea><br/>
+        <button onclick="sendMessage()">Send</button>
+    </div>
+    <div id="chatLog"></div>
+
+    <script>
+    async function sendMessage() {
+        const query = document.getElementById('userInput').value;
+        if (!query) return;
+
+        // POST request to chat endpoint
+        const response = await fetch('/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ user_query: query })
+        });
+        const data = await response.json();
+
+        // answer
+        const chatLog = document.getElementById('chatLog');
+        chatLog.innerHTML += `<p><b>You:</b> ${query}</p>`;
+        chatLog.innerHTML += `<p><b>AI:</b> ${data.answer}</p>`;
+    }
+    </script>
+</body>
+</html>
